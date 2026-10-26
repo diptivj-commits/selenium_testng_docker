@@ -1,0 +1,3 @@
+Verified: compose.yaml parsed, Maven XML parsed, source compilation successful, 3 ConfigurationTest tests passed (including HTTP practice page serving), TestNG HTML index report generated.
+Not verified here: Docker image build, Compose container startup, and Chrome browser tests; Docker is not installed in the generation environment.
+Run run-docker.bat on Windows with Docker Desktop running to validate end to end.

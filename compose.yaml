@@ -1,0 +1,31 @@
+services:
+  selenium:
+    image: selenium/standalone-chrome:4.50.0-20261010
+    shm_size: "2gb"
+    ports:
+      - "127.0.0.1:4444:4444"
+      - "127.0.0.1:7900:7900"
+    environment:
+      SE_NODE_MAX_SESSIONS: "1"
+      SE_NODE_SESSION_TIMEOUT: "120"
+    healthcheck:
+      test: ["CMD", "/opt/bin/check-grid.sh", "--host", "0.0.0.0", "--port", "4444"]
+      interval: 5s
+      timeout: 10s
+      retries: 30
+      start_period: 20s
+
+  test-runner:
+    build: .
+    depends_on:
+      selenium:
+        condition: service_healthy
+    environment:
+      RUN_MODE: remote
+      REMOTE_URL: http://selenium:4444
+      APP_BASE_URL: http://test-runner:8080
+      FIXTURE_BIND: 0.0.0.0
+      FIXTURE_PORT: "8080"
+      HEADLESS: "false"
+    volumes:
+      - ./reports:/workspace/reports
